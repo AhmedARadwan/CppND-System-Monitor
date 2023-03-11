@@ -22,26 +22,25 @@ Processor& System::Cpu() { return cpu_; }
 
 // TODO: Return a container composed of the system's processes
 vector<Process>& System::Processes() {
-    // vector<int> pids{LinuxParser::Pids()};
-    
-    // // for 
+    processes_.clear();
+    vector<int> pids{LinuxParser::Pids()};
 
-    // set<int> extant_pids;
-    // for (Process& const process : processes_){
-    //     extant_pids.insert(process.Pid());
-    // }
+    set<int> extant_pids;
+    for (Process& process : processes_){
+        extant_pids.insert(process.Pid());
+    }
 
 
-    // for (int pid : pids){
-    //     if(extant_pids.find(pid) == extant_pids.end()){
-    //         processes_.emplace_back(pid);
-    //     }
-    // }
-    // for (auto& process : processes_){
-    //     process.CpuUtilization(LinuxParser::ActiveJiffies(),
-    //                            LinuxParser::Jiffies());
-    // }
-    // std::sort(processes_.begin(), processes_.end(), std::greater<Process>());
+    for (int pid : pids){
+        if(extant_pids.find(pid) == extant_pids.end()){
+            processes_.emplace_back(pid);
+        }
+    }
+    for (auto& process : processes_){
+        process.CpuUtilization();
+    }
+    std::sort(processes_.begin(), processes_.end(), std::less<Process>());
+    std::reverse(processes_.begin(), processes_.end());
     return processes_;
 }
 
