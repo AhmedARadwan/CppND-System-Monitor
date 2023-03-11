@@ -5,14 +5,13 @@ float Processor::Utilization() {
     float cpu_util = 0.0;
     std::vector<int> curr_values = GetCPUInfo();
     if (flag) cpu_util = CalculatePercentage(curr_values, prev_values);
-    this->prev_values.clear();
     this->prev_values = curr_values;
     flag = true;
     return cpu_util;
 }
 
 std::vector<int> Processor::GetCPUInfo(){
-    std::ifstream input_file("/proc/stat");
+    std::ifstream input_file(LinuxParser::kProcDirectory + LinuxParser::kStatFilename);
     std::vector<int> values;
     std::string line, key;
     int tmp;
