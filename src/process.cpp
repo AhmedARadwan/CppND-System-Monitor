@@ -19,7 +19,7 @@ float Process::CpuUtilization() {
     long processUpTime = LinuxParser::UpTime(pid_);
     long totalTime = LinuxParser::ActiveJiffies(pid_);
     float elapTime = float(systemUpTime) - (float(processUpTime)/sysconf(_SC_CLK_TCK));
-    cpu_usage = 100*(float(totalTime)/sysconf(_SC_CLK_TCK))/elapTime;
+    cpu_usage = (float(totalTime)/sysconf(_SC_CLK_TCK))/elapTime;
     return cpu_usage;
 }
 
@@ -37,6 +37,5 @@ long int Process::UpTime() { return LinuxParser::UpTime(pid_); }
 
 // DONE: Overload the "less than" comparison operator for Process objects
 bool Process::operator<(Process const& a) const { 
-    if (this->cpu_usage < a.cpu_usage) return true;
-    return false;
+    return this->cpu_usage < a.cpu_usage;
 }
