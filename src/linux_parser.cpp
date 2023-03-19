@@ -242,7 +242,7 @@ string LinuxParser::Ram(int pid) {
     while(std::getline(input_file, line)){
       std::istringstream istringstream_(line);
       istringstream_ >> key >> value;
-      
+
       // VmRSS gives the exact physical memory being used as a part of Physical RAM
       if (key == "VmRSS:"){
         value /= 1024;
@@ -300,7 +300,8 @@ long LinuxParser::UpTime(int pid) {
       int counter = 1;
       while(istringstream_ >> value) {
         if(counter == 22) {
-          upTime = std::stol(value);
+          upTime = std::stol(value)/sysconf(_SC_CLK_TCK);
+          counter += 1;
           return upTime;
         }
       }
